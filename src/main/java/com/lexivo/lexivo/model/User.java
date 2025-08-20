@@ -17,6 +17,16 @@ public class User {
 	@Column(columnDefinition = "CHAR(10)")
 	private String joinDate;
 
+	public User() {
+	}
+
+	public User(String id, String username, String password, String joinDate) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.joinDate = joinDate;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -39,6 +49,14 @@ public class User {
 
 	public String getJoinDate() {
 		return joinDate;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setJoinDate(String joinDate) {
+		this.joinDate = joinDate;
 	}
 
 	@Override
