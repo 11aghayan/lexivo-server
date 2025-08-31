@@ -90,4 +90,16 @@ public final class Dictionary {
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
+
+	@Override
+	public String toString() {
+		return "Dictionary{" +
+				"id='" + id + '\'' +
+				", grammarList=" + grammarList +
+				", words=" + words +
+				", expressions=" + expressions +
+				", language=" + language +
+				", owner=" + owner +
+				'}';
+	}
 }

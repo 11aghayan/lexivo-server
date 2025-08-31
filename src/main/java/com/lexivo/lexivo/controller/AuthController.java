@@ -4,6 +4,7 @@ import com.lexivo.lexivo.model.User;
 import com.lexivo.lexivo.service.UserService;
 import com.lexivo.lexivo.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,17 +16,21 @@ public class AuthController {
 
 	@PostMapping("/login")
 	public String login(@RequestBody User user) {
+//		TODO: handle at the end
 		return "Login route reached";
 	}
 
-	@PostMapping("/register_user")
+	@PostMapping("/register")
 	public ResponseEntity<String> registerUser(@RequestBody User user) {
 		try {
 			service.registerUser(user);
 			return ResponseUtil.responseCreated();
 		}
 		catch (RuntimeException e) {
-			return ResponseUtil.responseServerError();
+			return
+					e instanceof DataIntegrityViolationException ?
+					ResponseUtil.responseDuplicateUsername() :
+					ResponseUtil.responseServerError();
 		}
 	}
 }
