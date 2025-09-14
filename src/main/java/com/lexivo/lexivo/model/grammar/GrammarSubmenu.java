@@ -58,4 +58,14 @@ public class GrammarSubmenu {
 	public void setExamples(List<String> examples) {
 		this.examples = examples;
 	}
+
+	@Override
+	public String toString() {
+		return "GrammarSubmenu{" +
+				"id='" + id + '\'' +
+				", header='" + header + '\'' +
+				", explanations=" + explanations +
+				", examples=" + examples +
+				'}';
+	}
 }

@@ -46,12 +46,10 @@ public class DictService {
 		dictRepo.save(dictionary);
 	}
 
-	public DictionaryPublic getDictById(String id) throws DictionaryNotFoundException {
+	public DictionaryPublic getDictById(String id) {
 		Dictionary dict = dictRepo.findById(id).orElse(null);
-		if (dict == null) {
-			throw new DictionaryNotFoundException(id);
-		}
-		return new DictionaryPublic(dict);
+
+		return dict == null ? null : new DictionaryPublic(dict);
 	}
 	public List<DictionaryPublic> getAllDicts(String ownerId) {
 		return dictRepo.findAllByOwnerId(ownerId).stream().map(DictionaryPublic::new).toList();

@@ -4,7 +4,9 @@ import com.lexivo.lexivo.exception.DictionaryNotFoundException;
 import com.lexivo.lexivo.exception.UserNotFoundException;
 import com.lexivo.lexivo.model.Dictionary;
 import com.lexivo.lexivo.model.DictionaryPublic;
+import com.lexivo.lexivo.model.User;
 import com.lexivo.lexivo.service.DictService;
+import com.lexivo.lexivo.service.UserService;
 import com.lexivo.lexivo.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,50 +19,61 @@ import java.util.List;
 @RequestMapping("/dict")
 public class DictController {
 	@Autowired
-	private DictService service;
+	private DictService dictService;
+	@Autowired
+	private UserService userService;
 
 	@PostMapping("/**")
-	public ResponseEntity<String> addDictionary(@RequestBody Dictionary dictionary) {
-		//		TODO: Check id dictionary.getId() matches the JWT ID
+	public ResponseEntity<?> addDictionary(@RequestBody Dictionary dictionary) {
 		try {
-			service.addDict(dictionary);
+			//		TODO: get the owner from jwt by username instead of id and update the dictionary
+			User user = userService.getUserById("d6532312-246c-4144-bef0-38060141ccd5");
+			dictionary.setOwner(user);
+			if (dictService.getDictById(dictionary.getId()) != null) {
+				return updateDictionary(dictionary);
+			}
+
+			dictService.addDict(dictionary);
 			return ResponseUtil.responseCreated();
 		}
 		catch (UserNotFoundException e) {
 			return ResponseUtil.responseUserNotFound(e.getMessage());
 		}
 		catch (RuntimeException e) {
-			return ResponseUtil.responseServerError();
+			return ResponseUtil.responseServerError(e);
 		}
 	}
 
 	@GetMapping("/{id}/**")
 	public ResponseEntity<?> getDictionary(@PathVariable String id) {
+		System.out.println(id);
 		try {
-			DictionaryPublic dictionary = service.getDictById(id);
-			return new ResponseEntity<>(dictionary, HttpStatus.OK);
-		}
-		catch (DictionaryNotFoundException e) {
-			return ResponseUtil.responseDictionaryNotFound(e.getMessage());
+			DictionaryPublic dictionary = dictService.getDictById(id);
+			return dictionary == null ?
+					ResponseUtil.responseDictionaryNotFound(id)
+					: new ResponseEntity<>(dictionary, HttpStatus.OK);
 		}
 		catch (RuntimeException e) {
-			return ResponseUtil.responseServerError();
+			return ResponseUtil.responseServerError(e);
 		}
 	}
 
 	@GetMapping("/**")
 	public ResponseEntity<List<DictionaryPublic>> getAllDictionaries() {
+//		TODO: Get owner from jwt
 		String ownerId = "d92af10d-68c4-4d84-ab99-0586e599892f";
 //		String ownerId = "d6532312-246c-4144-bef0-38060141ccd5";
 //		String ownerId = "non-existing-id";
-		return new ResponseEntity<>(service.getAllDicts(ownerId), HttpStatus.OK);
+		return new ResponseEntity<>(dictService.getAllDicts(ownerId), HttpStatus.OK);
 	}
 
 	@PutMapping("/**")
 	public ResponseEntity<?> updateDictionary(@RequestBody Dictionary dictionary) {
-//		TODO: Check id dictionary.getId() matches the JWT ID
 		try {
-			service.updateDict(dictionary);
+			//		TODO: get the owner from jwt by username instead of id and update the dictionary
+			User user = userService.getUserById("d6532312-246c-4144-bef0-38060141ccd5");
+			dictionary.setOwner(user);
+			dictService.updateDict(dictionary);
 			return ResponseUtil.responseOk();
 		}
 		catch (DictionaryNotFoundException e) {
@@ -70,22 +83,22 @@ public class DictController {
 			return ResponseUtil.responseUserNotFound(e.getMessage());
 		}
 		catch (RuntimeException e) {
-			return ResponseUtil.responseServerError();
+			return ResponseUtil.responseServerError(e);
 		}
 	}
 
 	@DeleteMapping("/{id}/**")
 	public ResponseEntity<?> deleteDictionary(@PathVariable String id) {
-		//		TODO: Check id dictionary.getId() matches the JWT ID
+		//		TODO: Check id dictionary.ownerId() matches the JWT ID
 		try {
-			service.deleteDictionary(id);
+			dictService.deleteDictionary(id);
 			return ResponseUtil.responseOk();
 		}
 		catch(DictionaryNotFoundException e) {
 			return ResponseUtil.responseDictionaryNotFound(e.getMessage());
 		}
 		catch (RuntimeException e) {
-			return ResponseUtil.responseServerError();
+			return ResponseUtil.responseServerError(e);
 		}
 	}
 }

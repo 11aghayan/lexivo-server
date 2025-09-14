@@ -32,4 +32,12 @@ public class Text {
 	public void setDetails(String details) {
 		this.details = details;
 	}
+
+	@Override
+	public String toString() {
+		return "Text{" +
+				"value='" + value + '\'' +
+				", details='" + details + '\'' +
+				'}';
+	}
 }

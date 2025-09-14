@@ -71,4 +71,15 @@ public abstract class LexicalItem {
 	public void setHash(String hash) {
 		this.hash = hash;
 	}
+
+	@Override
+	public String toString() {
+		return "LexicalItem{" +
+				"id='" + id + '\'' +
+				", original=" + original +
+				", translation=" + translation +
+				", comment='" + comment + '\'' +
+				", hash='" + hash + '\'' +
+				'}';
+	}
 }

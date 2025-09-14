@@ -30,7 +30,26 @@ public class AuthController {
 			return
 					e instanceof DataIntegrityViolationException ?
 					ResponseUtil.responseDuplicateUsername() :
-					ResponseUtil.responseServerError();
+					ResponseUtil.responseServerError(e);
 		}
+	}
+
+	@PutMapping("/edit_password")
+	public ResponseEntity<?> editPassword(@RequestBody User user) {
+//		TODO: Handle at the end
+		return null;
+	}
+
+	@GetMapping("/logout")
+	public ResponseEntity<?> logout() {
+//		TODO: Handle at the end
+		return null;
+	}
+
+	@DeleteMapping("/delete")
+	public ResponseEntity<?> deleteUser() {
+//		TODO: Handle at the end
+//		TODO: Add checks
+		return null;
 	}
 }

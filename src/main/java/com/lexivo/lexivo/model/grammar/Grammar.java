@@ -46,4 +46,13 @@ public class Grammar {
 	public void setSubmenuList(List<GrammarSubmenu> submenuList) {
 		this.submenuList = submenuList;
 	}
+
+	@Override
+	public String toString() {
+		return "Grammar{" +
+				"id='" + id + '\'' +
+				", header='" + header + '\'' +
+				", submenuList=" + submenuList +
+				'}';
+	}
 }
