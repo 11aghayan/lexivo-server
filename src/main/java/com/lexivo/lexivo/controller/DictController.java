@@ -46,7 +46,6 @@ public class DictController {
 
 	@GetMapping("/{id}/**")
 	public ResponseEntity<?> getDictionary(@PathVariable String id) {
-		System.out.println(id);
 		try {
 			DictionaryPublic dictionary = dictService.getDictById(id);
 			return dictionary == null ?
@@ -70,7 +69,8 @@ public class DictController {
 	@PutMapping("/**")
 	public ResponseEntity<?> updateDictionary(@RequestBody Dictionary dictionary) {
 		try {
-			//		TODO: get the owner from jwt by username instead of id and update the dictionary
+//				TODO: get the owner from jwt by username instead of id and update the dictionary
+//				TODO: if the local dictionary has more of anything than the uploaded one, then save the uploaded one locally and send a request to confirm to override the local dict
 			User user = userService.getUserById("d6532312-246c-4144-bef0-38060141ccd5");
 			dictionary.setOwner(user);
 			dictService.updateDict(dictionary);
